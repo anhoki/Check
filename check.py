@@ -1,16 +1,3 @@
-import subprocess
-import sys
-
-# Verificar e instalar plotly automáticamente
-try:
-    import plotly
-    print(f"✅ Plotly versión {plotly.__version__} ya instalada")
-except ImportError:
-    print("❌ Plotly no encontrado. Instalando...")
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "plotly"])
-    print("✅ Plotly instalado correctamente")
-import plotly
-    
 import streamlit as st
 import pandas as pd
 import plotly.express as px
