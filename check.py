@@ -4,6 +4,9 @@ import plotly.express as px
 import numpy as np
 from datetime import datetime
 import locale
+import folium
+from streamlit_folium import st_folium
+
 
 # Configuración de página
 st.set_page_config(
@@ -59,6 +62,114 @@ if fase_seleccionada != "Todas":
 if estado_seleccionado != "Todos":
     df_filtrado = df_filtrado[df_filtrado["estado_general"] == estado_seleccionado]
 
+
+# ============================================
+# COORDENADAS DE DEPARTAMENTOS DE GUATEMALA
+# ============================================
+COORDENADAS_DEPARTAMENTOS = {
+    'GUATEMALA': [14.6349, -90.5069],
+    'EL PROGRESO': [14.8500, -90.0667],
+    'SACATEPEQUEZ': [14.5333, -90.7333],
+    'CHIMALTENANGO': [14.7000, -90.8167],
+    'ESCUINTLA': [14.3000, -90.7833],
+    'SANTA ROSA': [14.1667, -90.3500],
+    'SOLOLÁ': [14.7667, -91.1833],
+    'TOTONICAPÁN': [14.9167, -91.3667],
+    'QUETZALTENANGO': [14.8333, -91.5167],
+    'SUCHITEPÉQUEZ': [14.5333, -91.5000],
+    'RETALHULEU': [14.5333, -91.6833],
+    'SAN MARCOS': [14.9667, -91.8000],
+    'HUEHUETENANGO': [15.3167, -91.4667],
+    'QUICHÉ': [15.3000, -91.0000],
+    'BAJA VERAPAZ': [15.1333, -90.3667],
+    'ALTA VERAPAZ': [15.5000, -90.3333],
+    'PETÉN': [16.9000, -89.9000],
+    'IZABAL': [15.5000, -88.5000],
+    'ZACAPA': [14.9667, -89.5333],
+    'CHIQUIMULA': [14.8000, -89.5333],
+    'JALAPA': [14.6333, -89.9833],
+    'JUTIAPA': [14.2833, -89.9000],
+}
+
+def crear_mapa_burbujas(df):
+    """Crea un mapa de burbujas con folium - adaptado para tu CSV"""
+    
+    if df.empty or 'departamento' not in df.columns:
+        return None
+    
+    # Agrupar por departamento
+    monto_por_depto = df.groupby('departamento')['inversion_estimada'].sum().reset_index()
+    monto_por_depto.columns = ['departamento', 'monto_total']
+    
+    if monto_por_depto.empty:
+        return None
+    
+    # Centro de Guatemala
+    center_lat, center_lon = 15.5, -90.25
+    
+    m = folium.Map(location=[center_lat, center_lon], zoom_start=7.5, control_scale=True)
+    
+    max_monto = monto_por_depto['monto_total'].max()
+    min_radius = 8
+    max_radius = 35
+    
+    for _, row in monto_por_depto.iterrows():
+        depto = row['departamento'].upper()
+        monto = row['monto_total']
+        
+        coords = COORDENADAS_DEPARTAMENTOS.get(depto)
+        if not coords:
+            continue
+        
+        # Radio proporcional al monto
+        radius = min_radius + (monto / max_monto) * (max_radius - min_radius) if max_monto > 0 else min_radius
+        num_proyectos = len(df[df['departamento'].str.upper() == depto])
+        
+        folium.CircleMarker(
+            location=coords,
+            radius=radius,
+            popup=f"""
+                <b>{depto}</b><br>
+                💰 Inversión: Q{monto:,.0f}<br>
+                📊 Proyectos: {num_proyectos}
+            """,
+            tooltip=f"{depto}: Q{monto:,.0f}",
+            color='#2E86AB',
+            fill=True,
+            fill_color='#2E86AB',
+            fill_opacity=0.6,
+            weight=2
+        ).add_to(m)
+    
+    return m
+
+def crear_mapa_calor(df):
+    """Crea un mapa de calor con folium - adaptado para tu CSV"""
+    
+    if df.empty or 'departamento' not in df.columns:
+        return None
+    
+    heat_data = []
+    for _, row in df.iterrows():
+        depto = row['departamento'].upper()
+        monto = row['inversion_estimada']
+        coords = COORDENADAS_DEPARTAMENTOS.get(depto)
+        if coords:
+            # Intensidad basada en el monto (más monto = más puntos de calor)
+            intensidad = max(1, min(100, int(monto / 100000)))
+            for _ in range(intensidad):
+                heat_data.append(coords)
+    
+    if not heat_data:
+        return None
+    
+    center_lat, center_lon = 15.5, -90.25
+    heat_map = folium.Map(location=[center_lat, center_lon], zoom_start=7.5, control_scale=True)
+    
+    from folium.plugins import HeatMap
+    HeatMap(heat_data, radius=20, blur=15, min_opacity=0.3).add_to(heat_map)
+    
+    return heat_map
 # ========== MÉTRICAS PRINCIPALES ==========
 st.subheader("📊 Resumen General")
 
@@ -199,28 +310,30 @@ with col3:
     conteo_segeplan = df_filtrado["aprobacion_segeplan"].value_counts()
     st.bar_chart(conteo_segeplan)
 
-# ========== MAPA (si hay coordenadas) ==========
+# ============================================
+# MAPAS
+# ============================================
 st.subheader("🗺️ Distribución geográfica de proyectos")
 
-# Nota: El CSV original no tiene coordenadas, esto es un placeholder
-st.info("Para activar el mapa, agrega columnas 'lat' y 'lon' al CSV con coordenadas reales de cada municipio.")
+# Selector de tipo de mapa
+tipo_mapa = st.radio(
+    "Selecciona tipo de mapa",
+    ["Mapa de burbujas (Inversión)", "Mapa de calor"],
+    horizontal=True
+)
 
-# Simular coordenadas (opcional - descomentar si se agregan al CSV)
-if "lat" in df_filtrado.columns and "lon" in df_filtrado.columns:
-    fig_mapa = px.scatter_mapbox(
-        df_filtrado,
-        lat="lat",
-        lon="lon",
-        hover_name="nombre_proyecto",
-        size="inversion_estimada",
-        color="estado_general",
-        zoom=6,
-        height=500,
-        title="Ubicación de proyectos"
-    )
-    fig_mapa.update_layout(mapbox_style="open-street-map")
-    st.plotly_chart(fig_mapa, use_container_width=True)
-
+if tipo_mapa == "Mapa de burbujas (Inversión)":
+    mapa = crear_mapa_burbujas(df_filtrado)
+    if mapa:
+        st_folium(mapa, width=800, height=500)
+    else:
+        st.info("No hay datos suficientes para generar el mapa")
+else:
+    mapa_calor = crear_mapa_calor(df_filtrado)
+    if mapa_calor:
+        st_folium(mapa_calor, width=800, height=500)
+    else:
+        st.info("No hay datos suficientes para generar el mapa de calor")
 # ========== DESCARGA DE DATOS ==========
 st.sidebar.markdown("---")
 st.sidebar.subheader("📥 Descarga de datos")
