@@ -315,25 +315,37 @@ with col3:
 # ============================================
 st.subheader("🗺️ Distribución geográfica de proyectos")
 
-# Selector de tipo de mapa
-tipo_mapa = st.radio(
-    "Selecciona tipo de mapa",
-    ["Mapa de burbujas (Inversión)", "Mapa de calor"],
-    horizontal=True
-)
-
-if tipo_mapa == "Mapa de burbujas (Inversión)":
-    mapa = crear_mapa_burbujas(df_filtrado)
-    if mapa:
-        st_folium(mapa, width=800, height=500)
-    else:
-        st.info("No hay datos suficientes para generar el mapa")
+# Verificar que hay datos
+if df_filtrado.empty:
+    st.warning("No hay datos para mostrar en el mapa")
 else:
-    mapa_calor = crear_mapa_calor(df_filtrado)
-    if mapa_calor:
-        st_folium(mapa_calor, width=800, height=500)
-    else:
-        st.info("No hay datos suficientes para generar el mapa de calor")
+    # Selector de tipo de mapa
+    tipo_mapa = st.radio(
+        "Selecciona tipo de mapa",
+        ["Mapa de burbujas (Inversión)", "Mapa de calor"],
+        horizontal=True
+    )
+    
+    try:
+        if tipo_mapa == "Mapa de burbujas (Inversión)":
+            mapa = crear_mapa_burbujas(df_filtrado)
+            if mapa is not None:
+                # Usar folium_static en lugar de st_folium para evitar errores
+                from folium.plugins import HeatMap
+                st.components.v1.html(mapa._repr_html_(), width=800, height=500)
+            else:
+                st.info("No se pudo generar el mapa de burbujas. Verifica que hay datos con coordenadas.")
+        else:
+            mapa_calor = crear_mapa_calor(df_filtrado)
+            if mapa_calor is not None:
+                st.components.v1.html(mapa_calor._repr_html_(), width=800, height=500)
+            else:
+                st.info("No se pudo generar el mapa de calor. Verifica que hay datos con coordenadas.")
+    except Exception as e:
+        st.error(f"Error al generar el mapa: {e}")
+        st.info("Asegúrate de que el archivo CSV tiene la columna 'departamento' correctamente escrita")
+
+
 # ========== DESCARGA DE DATOS ==========
 st.sidebar.markdown("---")
 st.sidebar.subheader("📥 Descarga de datos")
