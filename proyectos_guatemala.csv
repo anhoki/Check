@@ -1,0 +1,51 @@
+﻿id,nombre_proyecto,departamento,municipio,comunidad,tipologia,beneficiarios,inversion_estimada,fase_actual,avance_porcentaje,fecha_inicio_gestion,fecha_fin_estimada,estado_general,aprobacion_idaeh,aprobacion_marn,aprobacion_segeplan,contrato_firmado
+1,Mejoramiento Escuela Oficial Rural Mixta Las Flores,Guatemala,San José Pinula,Zona 3,Escuela,450,2450000,F5,68,2025-01-10,2026-06-15,En aprobación,En proceso,Pendiente,Pendiente,No
+2,Construcción Centro de Salud Tipo B,Huehuetenango,Santa Eulalia,Caserío Chiabal,Salud,8200,4200000,F3,42,2025-02-01,2026-12-10,En diseño,Pendiente,Pendiente,Pendiente,No
+3,Ampliación sistema de agua potable,Quetzaltenango,Zunil,Cantón Chuicavioc,Agua,3500,1950000,F4,55,2025-01-15,2026-08-20,En costos,Pendiente,Pendiente,Pendiente,No
+4,Restauración escuela patrimonio cultural,Sacatepéquez,Antigua Guatemala,Calle del Arco,Escuela,320,6000000,F5,72,2024-10-01,2026-10-30,En aprobación,En proceso,Pendiente,Pendiente,No
+5,Construcción puente vehicular,San Marcos,Ayutla,Finca El Porvenir,Puente,12000,8500000,F2,22,2025-03-10,2027-02-28,Detenido,Pendiente,Pendiente,Pendiente,No
+6,Mejoramiento parque central,Chimaltenango,Tecpán,Centro,Parque,9000,1200000,F6,86,2024-11-01,2025-12-15,Listo para compras,Completado,Completado,En proceso,No
+7,Construcción instituto básico,Alta Verapaz,Cobán,Las Vegas,Escuela,650,5300000,F3,38,2025-04-01,2027-01-15,En diseño,Pendiente,Pendiente,Pendiente,No
+8,Drenajes y letrinización,Baja Verapaz,Salamá,Churacá,Saneamiento,2800,2100000,F4,58,2025-02-20,2026-09-10,En costos,Pendiente,Pendiente,Pendiente,No
+9,Electrificación rural,Petén,San Benito,El Naranjo,Electrificación,1200,3600000,F5,64,2025-01-05,2026-07-25,En aprobación,Completado,Pendiente,Pendiente,No
+10,Construcción centro comunitario,Izabal,Puerto Barrios,La Buga,Comunitario,5400,2800000,F2,18,2025-05-10,2027-03-15,Detenido,Pendiente,Pendiente,Pendiente,No
+11,Mejoramiento escuela primaria,Zacapa,Estanzuela,El Jícaro,Escuela,390,1750000,F3,45,2025-02-15,2026-11-20,En diseño,Pendiente,Pendiente,Pendiente,No
+12,Construcción mercado municipal,Chiquimula,Esquipulas,Centro,Mercado,15000,7200000,F4,52,2025-03-01,2026-10-05,En costos,Pendiente,Pendiente,Pendiente,No
+13,Ampliación cementerio,Jalapa,San Pedro Pinula,Las Flores,Infraestructura,18000,1450000,F2,20,2025-06-01,2027-04-30,Detenido,Pendiente,Pendiente,Pendiente,No
+14,Restauración iglesia colonial,Sacatepéquez,Jocotenango,Barrio El Calvario,Patrimonio,2000,4800000,F5,71,2024-12-01,2026-09-30,En aprobación,En proceso,Pendiente,Pendiente,No
+15,Construcción polideportivo,Escuintla,Santa Lucía Cotzumalguapa,Las Victorias,Deporte,8500,3200000,F3,35,2025-04-15,2026-12-20,En diseño,Pendiente,Pendiente,Pendiente,No
+16,Mejoramiento red de alcantarillado,Suchitepéquez,Mazatenango,San Martín,Saneamiento,22000,9100000,F4,60,2025-02-10,2026-11-30,En costos,Pendiente,Pendiente,Pendiente,No
+17,Construcción guardería infantil,Retalhuleu,San Sebastián,El Centro,Educación,180,1850000,F2,24,2025-05-15,2027-02-28,Detenido,Pendiente,Pendiente,Pendiente,No
+18,Bacheo de calles urbanas,Sololá,Panajachel,Barrio Norte,Vialidad,6200,980000,F1,14,2025-07-01,2026-05-30,En gestión,Pendiente,Pendiente,Pendiente,No
+19,Construcción anfiteatro,Totonicapán,Momostenango,Chuisís,Cultura,10000,2500000,F0,4,2025-08-01,2026-06-15,En gestión,Pendiente,Pendiente,Pendiente,No
+20,Mejoramiento basurero municipal,Quiché,Santa Cruz del Quiché,Los Cipreses,Ambiente,45000,3300000,F5,66,2025-01-20,2026-08-15,En aprobación,Completado,En proceso,Pendiente,No
+21,Construcción escuela párvulos,Guatemala,Villa Nueva,Brisas del Río,Escuela,280,1980000,F6,88,2024-09-15,2025-11-30,Listo para compras,Completado,Completado,En proceso,No
+22,Instalación de paneles solares,Huehuetenango,Todos Santos Cuchumatán,Paizón,Energía,1500,2600000,F3,40,2025-03-15,2026-12-01,En diseño,Pendiente,Pendiente,Pendiente,No
+23,Mejoramiento hospital departamental,San Marcos,San Marcos,Zona 2,Salud,80000,15000000,F5,74,2024-11-15,2026-10-20,En aprobación,Completado,Pendiente,Pendiente,No
+24,Rehabilitación camino rural,Alta Verapaz,Chisec,Seac,Infraestructura,3800,4500000,F2,19,2025-06-15,2027-05-15,Detenido,Pendiente,Pendiente,Pendiente,No
+25,Construcción planta de tratamiento,Petén,Flores,Santa Elisa,Ambiente,25000,11200000,F4,56,2025-03-10,2026-09-25,En costos,Pendiente,Pendiente,Pendiente,No
+26,Remodelación biblioteca municipal,Baja Verapaz,Cubulco,Centro,Cultura,3200,890000,F3,48,2025-04-20,2026-10-10,En diseño,Pendiente,Pendiente,Pendiente,No
+27,Construcción centro de acopio,Izabal,Morales,Livingston,Agropecuario,1200,1600000,F2,21,2025-05-20,2027-03-01,Detenido,Pendiente,Pendiente,Pendiente,No
+28,Mejoramiento pozo mecánico,Zacapa,Huité,Rincón Grande,Agua,950,720000,F5,70,2025-02-25,2026-07-15,En aprobación,Completado,Pendiente,Pendiente,No
+29,Construcción caseta de bombas,Chimaltenango,Patzún,Patzún Centro,Riego,680,540000,F1,12,2025-07-15,2026-06-30,En gestión,Pendiente,Pendiente,Pendiente,No
+30,Restauración estación de tren,Escuintla,Escuintla,El Molino,Patrimonio,7000,3900000,F5,69,2025-01-12,2026-12-15,En aprobación,En proceso,Pendiente,Pendiente,No
+31,Construcción salón de usos múltiples,Suchitepéquez,Santo Domingo,San Luis,Comunitario,2500,1100000,F4,59,2025-03-20,2026-11-10,En costos,Pendiente,Pendiente,Pendiente,No
+32,Mejoramiento oratorio,Sacatepéquez,San Lucas Sacatepéquez,San Felipe,Religioso,1800,680000,F2,17,2025-08-01,2027-06-30,Detenido,Pendiente,Pendiente,Pendiente,No
+33,Construcción vivero municipal,Sololá,Nahualá,Pachojilá,Ambiente,5000,430000,F0,3,2025-09-01,2026-07-20,En gestión,Pendiente,Pendiente,Pendiente,No
+34,Ampliación línea eléctrica,Totonicapán,San Francisco El Alto,Chiyax,Energía,4200,2300000,F3,37,2025-05-01,2027-01-10,En diseño,Pendiente,Pendiente,Pendiente,No
+35,Construcción área de juegos infantiles,Retalhuleu,Champerico,El Cerrito,Recreación,3500,520000,F6,90,2024-10-15,2025-12-01,Listo para compras,Completado,Completado,Completado,No
+36,Mejoramiento centro de salud,Quiché,Nebaj,Sotzil,Salud,12000,2900000,F5,75,2025-01-08,2026-08-30,En aprobación,Completado,Pendiente,Pendiente,No
+37,Construcción rastro municipal,Jutiapa,Jutiapa,El Morral,Agropecuario,20000,4100000,F3,44,2025-04-10,2026-12-25,En diseño,Pendiente,Pendiente,Pendiente,No
+38,Reforestación y sistema de captación,Jalapa,Jalapa,Las Lomas,Ambiente,8200,890000,F2,23,2025-06-20,2027-04-15,Detenido,Pendiente,Pendiente,Pendiente,No
+39,Construcción oficinas municipales,Santa Rosa,Cuilapa,Barrio El Centro,Administrativo,140,2200000,F4,54,2025-03-05,2026-10-01,En costos,Pendiente,Pendiente,Pendiente,No
+40,Mejoramiento orfanato,Guatemala,Mixco,San Luis,Social,210,1760000,F5,67,2025-02-01,2026-09-15,En aprobación,Completado,Pendiente,Pendiente,No
+41,Construcción paredón en río,Quetzaltenango,Coatepeque,Las Palmas,Mitigación,15000,6500000,F2,26,2025-07-01,2027-05-30,Detenido,Pendiente,Pendiente,Pendiente,No
+42,Mejoramiento escuela bilingüe,Alta Verapaz,San Juan Chamelco,Carchá,Escuela,520,2050000,F3,41,2025-04-25,2027-02-28,En diseño,Pendiente,Pendiente,Pendiente,No
+43,Construcción albergue para adultos mayores,Huehuetenango,Jacaltenango,Caserío Secaim,Social,120,3300000,F4,57,2025-03-25,2026-10-15,En costos,Pendiente,Pendiente,Pendiente,No
+44,Instalación de red de internet rural,Petén,La Libertad,El Caoba,Tecnología,2100,2800000,F5,73,2025-02-18,2026-12-05,En aprobación,Completado,Pendiente,Pendiente,No
+45,Construcción estación de bomberos,San Marcos,San Pedro Sacatepéquez,Zona 3,Emergencias,55000,5400000,F3,39,2025-05-20,2027-01-20,En diseño,Pendiente,Pendiente,Pendiente,No
+46,Mejoramiento cementerio indígena,Sololá,Santiago Atitlán,Chuk Muk,Cultural,12000,980000,F2,16,2025-08-15,2027-07-15,Detenido,Pendiente,Pendiente,Pendiente,No
+47,Construcción parque lineal,Zacapa,Zacapa,Colonia El Porvenir,Recreación,9500,1450000,F0,5,2025-09-15,2026-08-01,En gestión,Pendiente,Pendiente,Pendiente,No
+48,Mejoramiento red hidrosanitaria escuela,Chiquimula,Camotán,Tashiste,Escuela,410,820000,F6,87,2024-11-10,2025-12-20,Listo para compras,Completado,Completado,En proceso,No
+49,Construcción clínica veterinaria,Suchitepéquez,Chicacao,San Andrés,Agropecuario,6200,1200000,F4,53,2025-03-30,2026-11-25,En costos,Pendiente,Pendiente,Pendiente,No
+50,Restauración museo comunitario,Sacatepéquez,San Antonio Aguas Calientes,Pocitos,Cultural,4000,2400000,F5,76,2024-12-15,2026-11-20,En aprobación,En proceso,Pendiente,Pendiente,No
