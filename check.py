@@ -346,58 +346,65 @@ else:
         st.info("Asegúrate de que el archivo CSV tiene la columna 'departamento' correctamente escrita")
 
 # ============================================
-# 🚦 SEMÁFORO DE AVANCE POR PROYECTO
+# 🚦 SEMÁFORO DE AVANCE POR PROYECTO CON FLUJO DE FASES
 # ============================================
 
-# Diccionario con descripción de cada fase
+# Definición del flujo de fases (en orden)
+FLUJO_FASES = ['F0', 'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7']
+
+# Diccionario con nombres cortos de cada fase
+NOMBRES_FASES = {
+    'F0': '📄 Gestión',
+    'F1': '🔍 Visita',
+    'F2': '🔬 Estudios',
+    'F3': '✏️ Diseño',
+    'F4': '💰 Costos',
+    'F5': '✅ Aprobaciones',
+    'F6': '🛒 Guatecompras',
+    'F7': '🏁 Cierre'
+}
+
+# Diccionario con descripción completa de cada fase
 DESCRIPCION_FASES = {
     'F0': {
         'nombre': 'Gestión inicial',
         'descripcion': 'Documentación, solicitudes y gestión de permisos iniciales',
-        'rango': '0% - 5%',
-        'color': '#FF6B6B'
+        'rango': '0% - 5%'
     },
     'F1': {
         'nombre': 'Visita y estudios previos',
         'descripcion': 'Visita técnica, estudios topográficos y diagnóstico inicial',
-        'rango': '5% - 15%',
-        'color': '#FF9F4A'
+        'rango': '5% - 15%'
     },
     'F2': {
         'nombre': 'Estudios especiales',
         'descripcion': 'Geotécnico, hidrológico, restauración y otros estudios de soporte',
-        'rango': '15% - 25%',
-        'color': '#FFD93D'
+        'rango': '15% - 25%'
     },
     'F3': {
         'nombre': 'Diseño técnico',
         'descripcion': 'Planos arquitectónicos, estructurales, hidrosanitarios y eléctricos',
-        'rango': '25% - 50%',
-        'color': '#6BCB77'
+        'rango': '25% - 50%'
     },
     'F4': {
         'nombre': 'Costos y presupuesto',
         'descripcion': 'Presupuesto, catálogo de renglones, especificaciones técnicas',
-        'rango': '50% - 60%',
-        'color': '#4D96FF'
+        'rango': '50% - 60%'
     },
     'F5': {
         'nombre': 'Aprobaciones externas',
         'descripcion': 'IDAEH, MARN, MSPAS, SEGEPLAN, Municipalidad',
-        'rango': '60% - 80%',
-        'color': '#9B59B6'
+        'rango': '60% - 80%'
     },
     'F6': {
         'nombre': 'Guatecompras',
         'descripcion': 'Publicación, adjudicación y contratación',
-        'rango': '80% - 95%',
-        'color': '#E84393'
+        'rango': '80% - 95%'
     },
     'F7': {
         'nombre': 'Cierre y contrato',
         'descripcion': 'Firma de contrato, inicio de obra y liquidación',
-        'rango': '95% - 100%',
-        'color': '#1ABC9C'
+        'rango': '95% - 100%'
     }
 }
 
@@ -417,12 +424,17 @@ proyecto_data = df_filtrado[df_filtrado['nombre_proyecto'] == proyecto_seleccion
 avance = proyecto_data['avance_porcentaje']
 fase_actual = proyecto_data['fase_actual']
 
-# Obtener información de la fase actual
+# Encontrar índice de la fase actual
+indice_actual = FLUJO_FASES.index(fase_actual) if fase_actual in FLUJO_FASES else 0
+fases_completadas = indice_actual + 1
+fases_totales = len(FLUJO_FASES)
+fases_faltantes = fases_totales - fases_completadas
+
+# Información de la fase actual
 info_fase = DESCRIPCION_FASES.get(fase_actual, {
     'nombre': 'Fase no definida',
     'descripcion': 'Proyecto en fase no catalogada',
-    'rango': '0% - 100%',
-    'color': '#95A5A6'
+    'rango': '0% - 100%'
 })
 
 # Definir color del semáforo según avance
@@ -472,17 +484,68 @@ with col_detalles:
 st.progress(avance / 100, text=f"📊 Progreso general del proyecto: {avance:.0f}%")
 
 # ============================================
-# DETALLE DE LA FASE ACTUAL (LEYENDA COORDINADA)
+# FLUJO VISUAL DE FASES
 # ============================================
 st.markdown("---")
-st.markdown(f"### 📍 Fase actual del proyecto: **{fase_actual} - {info_fase['nombre']}**")
+st.markdown("### 📍 Flujo de fases del proyecto")
 
+# Crear columnas para cada fase
+cols = st.columns(len(FLUJO_FASES))
+
+for i, (col, fase) in enumerate(zip(cols, FLUJO_FASES)):
+    nombre_fase = NOMBRES_FASES.get(fase, fase)
+    es_fase_actual = (fase == fase_actual)
+    es_fase_completada = (i < indice_actual)
+    
+    if es_fase_completada:
+        # Fase completada (verde)
+        color = "#4CAF50"
+        icono = "✅"
+        estado_texto = "Completada"
+    elif es_fase_actual:
+        # Fase actual (azul/naranja según avance)
+        color = "#FF9800"
+        icono = "🔵"
+        estado_texto = "Actual"
+    else:
+        # Fase pendiente (gris)
+        color = "#E0E0E0"
+        icono = "⭕"
+        estado_texto = "Pendiente"
+    
+    with col:
+        st.markdown(
+            f"""
+            <div style="text-align: center; padding: 10px 5px; margin: 5px; border-radius: 10px; background-color: {color}20; border: 1px solid {color};">
+                <div style="font-size: 20px;">{icono}</div>
+                <div style="font-size: 11px; font-weight: bold;">{nombre_fase}</div>
+                <div style="font-size: 9px; color: {color};">{estado_texto}</div>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
+# Resumen de fases
+col_resumen1, col_resumen2, col_resumen3 = st.columns(3)
+
+with col_resumen1:
+    st.metric("✅ Fases completadas", f"{fases_completadas} de {fases_totales}")
+
+with col_resumen2:
+    st.metric("⏳ Fase actual", f"{fase_actual} - {info_fase['nombre']}")
+
+with col_resumen3:
+    st.metric("📋 Fases faltantes", fases_faltantes)
+
+# Descripción de la fase actual
 st.markdown(
     f"""
-    <div style="background-color: {info_fase['color']}20; padding: 15px; border-radius: 10px; border-left: 5px solid {info_fase['color']};">
-        <p style="margin: 0;"><b>📝 ¿Qué significa esta fase?</b><br>{info_fase['descripcion']}</p>
-        <p style="margin: 10px 0 0 0;"><b>🎯 Rango de avance esperado en esta fase:</b> {info_fase['rango']}</p>
-        <p style="margin: 5px 0 0 0; font-size: 13px; color: #666;">💡 El proyecto tiene un avance general del {avance:.0f}%</p>
+    <div style="background-color: {color_fondo}; padding: 15px; border-radius: 10px; margin-top: 10px;">
+        <p style="margin: 0;"><b>📝 ¿Qué significa la fase actual ({fase_actual})?</b><br>{info_fase['descripcion']}</p>
+        <p style="margin: 10px 0 0 0; font-size: 13px; color: #666;">
+            💡 Rango de avance esperado: {info_fase['rango']} | 
+            Avance actual: {avance:.0f}%
+        </p>
     </div>
     """,
     unsafe_allow_html=True
