@@ -346,8 +346,61 @@ else:
         st.info("Asegúrate de que el archivo CSV tiene la columna 'departamento' correctamente escrita")
 
 # ============================================
-# 🚦 SEMÁFORO DE AVANCE POR PROYECTO
+# 🚦 SEMÁFORO DE AVANCE POR PROYECTO (MEJORADO)
 # ============================================
+
+# Diccionario con descripción de cada fase
+DESCRIPCION_FASES = {
+    'F0': {
+        'nombre': 'Gestión inicial',
+        'descripcion': 'Documentación, solicitudes y gestión de permisos iniciales',
+        'rango': [0, 5],
+        'color': '#FF6B6B'
+    },
+    'F1': {
+        'nombre': 'Visita y estudios previos',
+        'descripcion': 'Visita técnica, estudios topográficos y diagnóstico inicial',
+        'rango': [5, 15],
+        'color': '#FF9F4A'
+    },
+    'F2': {
+        'nombre': 'Estudios especiales',
+        'descripcion': 'Geotécnico, hidrológico, restauración y otros estudios de soporte',
+        'rango': [15, 25],
+        'color': '#FFD93D'
+    },
+    'F3': {
+        'nombre': 'Diseño técnico',
+        'descripcion': 'Planos arquitectónicos, estructurales, hidrosanitarios y eléctricos',
+        'rango': [25, 50],
+        'color': '#6BCB77'
+    },
+    'F4': {
+        'nombre': 'Costos y presupuesto',
+        'descripcion': 'Presupuesto, catálogo de renglones, especificaciones técnicas',
+        'rango': [50, 60],
+        'color': '#4D96FF'
+    },
+    'F5': {
+        'nombre': 'Aprobaciones externas',
+        'descripcion': 'IDAEH, MARN, MSPAS, SEGEPLAN, Municipalidad',
+        'rango': [60, 80],
+        'color': '#9B59B6'
+    },
+    'F6': {
+        'nombre': 'Guatecompras',
+        'descripcion': 'Publicación, adjudicación y contratación',
+        'rango': [80, 95],
+        'color': '#E84393'
+    },
+    'F7': {
+        'nombre': 'Cierre y contrato',
+        'descripcion': 'Firma de contrato, inicio de obra y liquidación',
+        'rango': [95, 100],
+        'color': '#1ABC9C'
+    }
+}
+
 st.subheader("🚦 Semáforo de avance por proyecto")
 
 # Selector de proyecto
@@ -361,19 +414,32 @@ proyecto_seleccionado = st.selectbox(
 # Obtener datos del proyecto seleccionado
 proyecto_data = df_filtrado[df_filtrado['nombre_proyecto'] == proyecto_seleccionado].iloc[0]
 
-# Definir color del semáforo según avance
 avance = proyecto_data['avance_porcentaje']
+fase_actual = proyecto_data['fase_actual']
 
+# Obtener información de la fase actual
+info_fase = DESCRIPCION_FASES.get(fase_actual, {
+    'nombre': 'Fase no definida',
+    'descripcion': 'Proyecto en fase no catalogada',
+    'rango': [0, 100],
+    'color': '#95A5A6'
+})
+
+# Calcular progreso dentro de la fase actual
+inicio_fase, fin_fase = info_fase['rango']
+progreso_en_fase = max(0, min(100, ((avance - inicio_fase) / (fin_fase - inicio_fase)) * 100)) if fin_fase > inicio_fase else 0
+
+# Definir color del semáforo según avance
 if avance < 30:
-    color_semaforo = "🔴"  # Rojo - crítico
+    color_semaforo = "🔴"
     mensaje_estado = "Crítico - Avance insuficiente"
     color_fondo = "#FFE5E5"
 elif avance < 70:
-    color_semaforo = "🟡"  # Amarillo - en progreso
+    color_semaforo = "🟡"
     mensaje_estado = "En progreso - Requiere atención"
     color_fondo = "#FFF4E5"
 else:
-    color_semaforo = "🟢"  # Verde - buen avance
+    color_semaforo = "🟢"
     mensaje_estado = "Buen avance - En camino"
     color_fondo = "#E5FFE5"
 
@@ -385,7 +451,7 @@ with col_semaforo:
         f"""
         <div style="text-align: center; background-color: {color_fondo}; padding: 20px; border-radius: 20px;">
             <h1 style="font-size: 80px; margin: 0;">{color_semaforo}</h1>
-            <p style="font-weight: bold; margin: 0;">{avance:.0f}%</p>
+            <p style="font-weight: bold; margin: 0; font-size: 24px;">{avance:.0f}%</p>
         </div>
         """,
         unsafe_allow_html=True
@@ -400,15 +466,70 @@ with col_detalles:
             <p style="margin: 5px 0;">🏗️ <b>Tipo:</b> {proyecto_data['tipologia']}</p>
             <p style="margin: 5px 0;">💰 <b>Inversión:</b> Q{proyecto_data['inversion_estimada']:,.0f}</p>
             <p style="margin: 5px 0;">👥 <b>Beneficiarios:</b> {proyecto_data['beneficiarios']:,}</p>
-            <p style="margin: 5px 0;">📊 <b>Fase actual:</b> {proyecto_data['fase_actual']}</p>
             <p style="margin: 10px 0 0 0; font-weight: bold;">🚦 Estado: {mensaje_estado}</p>
         </div>
         """,
         unsafe_allow_html=True
     )
 
-# Barra de progreso adicional
-st.progress(avance / 100, text=f"Progreso general del proyecto: {avance:.0f}%")
+# Barra de progreso general
+st.progress(avance / 100, text=f"📊 Progreso general del proyecto: {avance:.0f}%")
+
+# ============================================
+# DETALLE DE FASE ACTUAL
+# ============================================
+st.markdown("---")
+st.markdown(f"### 📍 Fase actual: **{fase_actual} - {info_fase['nombre']}**")
+
+col_fase_desc, col_fase_progreso = st.columns([2, 1])
+
+with col_fase_desc:
+    st.markdown(
+        f"""
+        <div style="background-color: {info_fase['color']}20; padding: 15px; border-radius: 10px; border-left: 5px solid {info_fase['color']};">
+            <p style="margin: 0;"><b>📝 Descripción:</b> {info_fase['descripcion']}</p>
+            <p style="margin: 10px 0 0 0;"><b>🎯 Rango de avance:</b> {inicio_fase}% - {fin_fase}%</p>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+with col_fase_progreso:
+    st.markdown(
+        f"""
+        <div style="background-color: #F0F2F6; padding: 15px; border-radius: 10px; text-align: center;">
+            <p style="margin: 0; font-size: 14px;">Progreso dentro de la fase</p>
+            <h2 style="margin: 0; color: {info_fase['color']};">{progreso_en_fase:.0f}%</h2>
+            <p style="margin: 5px 0 0 0; font-size: 12px;">Faltan {100 - progreso_en_fase:.0f}% para completar esta fase</p>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+# Barra de progreso por fase
+st.markdown(f"**Progreso dentro de {fase_actual} - {info_fase['nombre']}:**")
+st.progress(progreso_en_fase / 100)
+
+# ============================================
+# LEYENDA DE FASES (expandible)
+# ============================================
+with st.expander("📖 Leyenda de fases del proyecto"):
+    st.markdown("### Etapas del proyecto y su rango de avance")
+    
+    for codigo, datos in DESCRIPCION_FASES.items():
+        st.markdown(
+            f"""
+            <div style="display: flex; align-items: center; margin-bottom: 10px; padding: 8px; border-radius: 8px; background-color: {datos['color']}10;">
+                <div style="width: 60px; font-weight: bold; color: {datos['color']};">{codigo}</div>
+                <div style="flex: 1;">
+                    <b>{datos['nombre']}</b><br>
+                    <span style="font-size: 12px;">{datos['descripcion']}</span>
+                </div>
+                <div style="width: 80px; text-align: right; font-size: 12px;">{datos['rango'][0]}% - {datos['rango'][1]}%</div>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
 
 
 # ========== DESCARGA DE DATOS ==========
