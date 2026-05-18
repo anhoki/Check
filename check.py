@@ -345,6 +345,71 @@ else:
         st.error(f"Error al generar el mapa: {e}")
         st.info("Asegúrate de que el archivo CSV tiene la columna 'departamento' correctamente escrita")
 
+# ============================================
+# 🚦 SEMÁFORO DE AVANCE POR PROYECTO
+# ============================================
+st.subheader("🚦 Semáforo de avance por proyecto")
+
+# Selector de proyecto
+proyectos_disponibles = df_filtrado['nombre_proyecto'].tolist()
+proyecto_seleccionado = st.selectbox(
+    "Selecciona un proyecto para ver su estado",
+    proyectos_disponibles,
+    key="semaforo_selector"
+)
+
+# Obtener datos del proyecto seleccionado
+proyecto_data = df_filtrado[df_filtrado['nombre_proyecto'] == proyecto_seleccionado].iloc[0]
+
+# Definir color del semáforo según avance
+avance = proyecto_data['avance_porcentaje']
+
+if avance < 30:
+    color_semaforo = "🔴"  # Rojo - crítico
+    mensaje_estado = "Crítico - Avance insuficiente"
+    color_fondo = "#FFE5E5"
+elif avance < 70:
+    color_semaforo = "🟡"  # Amarillo - en progreso
+    mensaje_estado = "En progreso - Requiere atención"
+    color_fondo = "#FFF4E5"
+else:
+    color_semaforo = "🟢"  # Verde - buen avance
+    mensaje_estado = "Buen avance - En camino"
+    color_fondo = "#E5FFE5"
+
+# Mostrar semáforo con estilo
+col_semaforo, col_detalles = st.columns([1, 3])
+
+with col_semaforo:
+    st.markdown(
+        f"""
+        <div style="text-align: center; background-color: {color_fondo}; padding: 20px; border-radius: 20px;">
+            <h1 style="font-size: 80px; margin: 0;">{color_semaforo}</h1>
+            <p style="font-weight: bold; margin: 0;">{avance:.0f}%</p>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+with col_detalles:
+    st.markdown(
+        f"""
+        <div style="background-color: {color_fondo}; padding: 15px; border-radius: 10px;">
+            <h4 style="margin: 0 0 10px 0;">📋 {proyecto_data['nombre_proyecto']}</h4>
+            <p style="margin: 5px 0;">📍 <b>Ubicación:</b> {proyecto_data['departamento']} - {proyecto_data['municipio']}</p>
+            <p style="margin: 5px 0;">🏗️ <b>Tipo:</b> {proyecto_data['tipologia']}</p>
+            <p style="margin: 5px 0;">💰 <b>Inversión:</b> Q{proyecto_data['inversion_estimada']:,.0f}</p>
+            <p style="margin: 5px 0;">👥 <b>Beneficiarios:</b> {proyecto_data['beneficiarios']:,}</p>
+            <p style="margin: 5px 0;">📊 <b>Fase actual:</b> {proyecto_data['fase_actual']}</p>
+            <p style="margin: 10px 0 0 0; font-weight: bold;">🚦 Estado: {mensaje_estado}</p>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+# Barra de progreso adicional
+st.progress(avance / 100, text=f"Progreso general del proyecto: {avance:.0f}%")
+
 
 # ========== DESCARGA DE DATOS ==========
 st.sidebar.markdown("---")
